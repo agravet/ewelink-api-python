@@ -9,6 +9,14 @@ from ..state import Connection
 from ..exceptions import DeviceOffline
 from ..utils import generics
 from ..customtypes import Subscriptable
+import math
+
+def int_or_hex_2_int(hex_str):
+    if hex_str.find('a') != -1 or hex_str.find('A') != -1:
+        dec_num = sum(int(x, 16) * math.pow(16, len(hex_str)-i-1) for i, x in enumerate(hex_str))
+    else:
+        dec_num = hex_str
+    return int(dec_num)
 
 @dataclass
 class Brand:
@@ -64,7 +72,7 @@ class Device:
         self.location: str | None = data.get('location') if data.get('location', None) else None
         self.data = data
         self._state = state
-        self.type: DeviceType = DeviceType.__dict__['_value2member_map_'].get(int(data.get('type', 0)), 0)
+        self.type: DeviceType = DeviceType.__dict__['_value2member_map_'].get(int_or_hex_2_int(data.get('type', 0)), 0)
 
     async def edit(self, *states: Power, startup: Power = None, pulse: Pulse | Power = None, pulse_width: int = None):
         try:
