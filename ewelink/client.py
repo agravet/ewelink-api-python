@@ -60,9 +60,9 @@ class Client:
             device['deviceid']: Device(data = device, state = self._get_state()) for device in (devices_temp).get('devicelist', [])
         }
         #print(await self.http.get_devices())
-        devices_json = json.dumps(devices_temp)
-        with open("devices.json", "w") as jsonfile:
-            jsonfile.write(devices_json)
+        #devices_json = json.dumps(devices_temp)
+        #with open("devices.json", "w") as jsonfile:
+        #    jsonfile.write(devices_json)
         #print("Write successful")
         self.ws.set_devices(self._devices)
 
