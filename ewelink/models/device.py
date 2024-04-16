@@ -11,13 +11,6 @@ from ..utils import generics
 from ..customtypes import Subscriptable
 import math
 
-def int_or_hex_2_int(hex_str):
-    if hex_str.find('a') != -1 or hex_str.find('A') != -1:
-        dec_num = sum(int(x, 16) * math.pow(16, len(hex_str)-i-1) for i, x in enumerate(hex_str))
-    else:
-        dec_num = hex_str
-    return int(dec_num)
-
 @dataclass
 class Brand:
     name: str | None
@@ -72,7 +65,7 @@ class Device:
         self.location: str | None = data.get('location') if data.get('location', None) else None
         self.data = data
         self._state = state
-        self.type: DeviceType = DeviceType.__dict__['_value2member_map_'].get(int_or_hex_2_int(data.get('type', 0)), 0)
+        self.type: DeviceType = DeviceType.__dict__['_value2member_map_'].get(int(data.get('type', 0),16), 0)
 
     async def edit(self, *states: Power, startup: Power = None, pulse: Pulse | Power = None, pulse_width: int = None):
         try:
@@ -85,11 +78,15 @@ class Device:
                     _switch['switches'].append(_state['switches'])
                 else:
                     _switch.update(_state)
-            params = dict(
-                startup = startup.name if startup else self.startup.name,
-                pulse = pulse.name if isinstance(pulse, Power) else pulse.state.name if pulse else self.pulse.state.name,
-                pulseWidth = pulse_width or self.pulse.width
-            )
+            params = dict()
+
+            if (startup.name if startup else self.startup.name != 'unknown'):
+                params.update(startup = startup.name if startup else self.startup.name)
+            if pulse.name if isinstance(pulse, Power) else pulse.state.name if pulse else self.pulse.state.name != 'unknown':
+                params.update(pulse = pulse.name if isinstance(pulse, Power) else pulse.state.name if pulse else self.pulse.state.name)
+            if pulse_width or self.pulse.width != 0:
+                params.update(pulseWidth = pulse_width or self.pulse.width)
+
             params.update(_switch)
             await self._state.ws.update_device_status(self.id, **params)
         except DeviceOffline as offline:
