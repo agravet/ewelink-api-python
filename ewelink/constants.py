@@ -1,8 +1,10 @@
 from typing import ClassVar
 
 class Constants:
-    APP_ID: ClassVar[str] = 'oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq'
-    APP_SECRET: ClassVar[bytes] = b'6Nz4n0xA8s8qdxQf2GqurZj2Fs55FUvM'
+    #APP_ID: ClassVar[str] = 'oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq'
+    #APP_SECRET: ClassVar[bytes] = b'6Nz4n0xA8s8qdxQf2GqurZj2Fs55FUvM'
+    APP_ID: ClassVar[str] = 'Uw83EKZFxdif7XFXEsrpduz5YyjP7nTl'
+    APP_SECRET: ClassVar[bytes] = b'mXLOjea0woSMvK9gw7Fjsy7YlFO4iSu6'
     errors: ClassVar[dict[int, str]] =\
     {
         400: 'Parameter error',
