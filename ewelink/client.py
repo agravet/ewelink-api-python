@@ -33,6 +33,8 @@ class Gateway:
     def from_dict(cls: Type[GatewayT], data: dict[str, str | int]) -> GatewayT:
         return cls(domain = data.get("domain"), port = data.get("port"))
 
+
+
 class Client:
     http: HttpClient
     gateway: Gateway | None = None
@@ -40,6 +42,7 @@ class Client:
     _devices: dict[str, Device] = {}
     user: ClientUser | None
     loop: asyncio.AbstractEventLoop
+    data: {}
 
     def __init__(self, password: str, email: str | None = None, phone: str | int | None = None, *, region: str = 'us'):
         super().__init__()
@@ -59,11 +62,8 @@ class Client:
         {
             device['deviceid']: Device(data = device, state = self._get_state()) for device in (devices_temp).get('devicelist', [])
         }
-        #print(await self.http.get_devices())
-        #devices_json = json.dumps(devices_temp)
-        #with open("devices.json", "w") as jsonfile:
-        #    jsonfile.write(devices_json)
-        #print("Write successful")
+
+        self.data = devices_temp
         self.ws.set_devices(self._devices)
 
     def _get_state(self) -> Connection:
@@ -71,6 +71,22 @@ class Client:
 
     def get_device(self, id: str) -> Device | None:
         return self.devices.get(id)
+
+    def get_data(self):
+        devices_json = json.dumps(self.data)
+        with open("devices_before.json", "w") as jsonfile:
+            jsonfile.write(devices_json)
+        print("Write successful")
+        return self.data
+
+    async def get_data_now(self):
+        self.data = await self.http.get_devices()
+        #print(await self.http.get_devices())
+        devices_json = json.dumps(self.data)
+        with open("devices_after.json", "w") as jsonfile:
+            jsonfile.write(devices_json)
+        print("Write successful")
+        return self.data
 
     @property
     def devices(self):
