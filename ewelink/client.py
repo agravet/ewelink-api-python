@@ -76,7 +76,7 @@ class Client:
         devices_json = json.dumps(self.data)
         with open("devices_before.json", "w") as jsonfile:
             jsonfile.write(devices_json)
-        print("Write successful")
+        #print("Write successful")
         return self.data
 
     async def get_data_now(self):
@@ -85,7 +85,7 @@ class Client:
         devices_json = json.dumps(self.data)
         with open("devices_after.json", "w") as jsonfile:
             jsonfile.write(devices_json)
-        print("Write successful")
+        #print("Write successful")
         return self.data
 
     @property
