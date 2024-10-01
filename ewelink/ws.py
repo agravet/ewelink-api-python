@@ -94,7 +94,10 @@ class WebSocketClient:
             if 'error' in msg and 'params' not in msg:
                 match msg['error']:
                     case 0:
-                        self._futures['update'][0].set_result(msg)
+                        try:
+                            self._futures['update'][0].set_result(msg)
+                        except Exception as e:
+                            print(f"Ewelink poll_event() exception: {e}")
                     case 503:
                         self._futures['update'][0].set_exception(DeviceOffline("Device is offline."))
                 self._futures['update'].pop(0)
