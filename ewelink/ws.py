@@ -82,6 +82,38 @@ class WebSocketClient:
         result = await asyncio.wait_for(fut, timeout = 10)
         return result
 
+    async def getPower100Days(self, deviceid: str, **kwargs: list[dict[str, AnyStr]] | AnyStr) -> Response:
+        fut: asyncio.Future[Response] = self.http.loop.create_future()
+        self._futures['update'].append(fut)
+        await self.ws.send_json({
+            "action": "update",
+            "deviceid": deviceid,
+            "apikey": self.user.api_key,
+            "userAgent": "app",
+            "sequence": str(time.time() * 1000),
+            "params":{
+                  #"oneKwh":"get"
+                  "hundredDaysKwh":"get"
+            },
+            "tempRec":""
+        })
+
+        result = await asyncio.wait_for(fut, timeout = 10)
+        mystr = result['config']['hundredDaysKwhData']
+
+        power_list = []
+        while (len(mystr)>0):
+            day1=mystr[len(mystr)-6:]
+            int_part =  int(day1[0:2],16)
+            fractional_part = int(day1[3:4],16)/10 + int(day1[5:6],16)/100
+            power_list.append(int_part+fractional_part)
+            mystr = mystr[0:len(mystr)-6]
+        #print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+        #print(power_list[97])
+        #print(power_list[98])
+        #print(power_list[99])#today
+        return power_list
+
     async def poll_event(self):
         while True:
             msg: dict[str, dict[str, bool | AnyStr] | AnyStr] = await self.ws.receive_json()

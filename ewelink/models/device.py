@@ -103,6 +103,15 @@ class Device:
                 if 'switches' in self.params:
                     self.params.switches = switches
 
+
+    async def getPower100Days(self):
+        print("yyyyyyyyyyyyyyy")
+        try:
+            result = await self._state.ws.getPower100Days(self.id)
+        except DeviceOffline as offline:
+            raise DeviceOffline(*offline.args) from offline
+        return result
+
     @property
     def on(self) -> Subscriptable[int, Callable[[], Coroutine[None, Any, None]]]:
         return self._on(self)

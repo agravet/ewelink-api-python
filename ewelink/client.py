@@ -86,6 +86,8 @@ class Client:
         with open("devices_after.json", "w") as jsonfile:
             jsonfile.write(devices_json)
         #print("Write successful")
+        #xxx = await self.http.get_device_onekWh()
+        #print(xxx)
         return self.data
 
     @property

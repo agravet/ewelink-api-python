@@ -113,6 +113,24 @@ class HttpClient:
             headers = {'Authorization': f'Bearer {self.token}'})
         return await response.json()
 
+    async def get_device_onekWh(self) -> dict[str, list[dict[str, str | int | Any]]]:
+        response =\
+        await self.session.get(self.BASE + '/user/device',\
+            params=\
+            {
+               "action":"update",
+               "deviceid":"1001e2ae77",
+               #"apikey":"eeb35fc4-6c51-4cd9-83fc-",
+               "userAgent":"app",
+               #"sequence":"1609967674818",
+               "params":{
+                  "oneKwh":"get"
+               },
+               "tempRec":""
+            }, 
+            headers = {'Authorization': f'Bearer {self.token}'})
+        return await response.json()
+
     async def get_gateway(self) -> dict[str, Any]:
         response = await self.session.get(
             f'https://{self.region}-dispa.coolkit.cc/dispatch/app', 
