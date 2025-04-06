@@ -105,7 +105,6 @@ class Device:
 
 
     async def getPower100Days(self):
-        print("yyyyyyyyyyyyyyy")
         try:
             result = await self._state.ws.getPower100Days(self.id)
         except DeviceOffline as offline:

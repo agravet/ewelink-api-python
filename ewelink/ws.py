@@ -108,7 +108,6 @@ class WebSocketClient:
             fractional_part = int(day1[3:4],16)/10 + int(day1[5:6],16)/100
             power_list.append(int_part+fractional_part)
             mystr = mystr[0:len(mystr)-6]
-        #print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         #print(power_list[97])
         #print(power_list[98])
         #print(power_list[99])#today
