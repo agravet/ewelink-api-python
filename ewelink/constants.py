@@ -1,10 +1,37 @@
 from typing import ClassVar
 
+def api_key(key):
+    import json
+
+    with open("/var/www/html/dev/api_keys/api_keys.json") as f:
+        keys = json.load(f)
+    if key in keys:
+        api_key = keys[key]
+        #print(api_key)
+        return api_key
+    else:
+        print(f'Not found api key:[{key}]')
+        print (keys)
+        return 'dummy_key'
+
+def api_key_binary(key):
+    import json
+
+    with open("/var/www/html/dev/api_keys/api_keys.json") as f:
+        keys = json.load(f)
+    if key in keys:
+        api_key = keys[key]
+        api_key_bin = api_key.encode("utf-8")
+        return api_key_bin
+    else:
+        print(f'Not found api key:[{key}]')
+        return 'dummy_key'
+
+
+
 class Constants:
-    #APP_ID: ClassVar[str] = 'oeVkj2lYFGnJu5XUtWisfW4utiN4u9Mq'
-    #APP_SECRET: ClassVar[bytes] = b'6Nz4n0xA8s8qdxQf2GqurZj2Fs55FUvM'
-    APP_ID: ClassVar[str] = 'Uw83EKZFxdif7XFXEsrpduz5YyjP7nTl'
-    APP_SECRET: ClassVar[bytes] = b'mXLOjea0woSMvK9gw7Fjsy7YlFO4iSu6'
+    APP_ID: ClassVar[str] = api_key('EWELINK_APP_ID')
+    APP_SECRET: ClassVar[bytes] = api_key_binary('EWELINK_APP_SECRET_BINARY')
     errors: ClassVar[dict[int, str]] =\
     {
         400: 'Parameter error',
